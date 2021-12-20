@@ -8,7 +8,6 @@
     <title>Balloon Order page - Welcome and choose a Balloon</title>
     <style type="text/css">
         body {
-            width: 800px;
             margin: auto;
         }
     </style>
@@ -16,27 +15,81 @@
 
 <body>
 
-<main class="container w-75">
-    <h2 class="mt-3">Welcome to our Balloon Shop App</h2>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/balloons">Balloon Shop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/balloons">Home</a>
+                </li>
+            </ul>
+            <form class="d-flex" th:method="GET" th:action="@{/searchBalloons}">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searchBox">
+                <input class="btn btn-outline-danger" value="Search" type="submit">
+            </form>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    <h2 class="mt-3 text-center" style="color: #840F0F">Welcome to our Balloon Shop App</h2>
 
     <h3 class="mt-4 text-center mb-4">Choose balloon color:</h3>
-    <div>
+    <div class="container w-75">
         <form th:method="POST" th:action="@{/}">
-            <ul th:each="balloon: ${balloons}" style="list-style-type: none">
-                <input th:text="${balloon.getDescription()}" th:value="${balloon.getName()}" type="radio" name="color">
-                (<th:block th:text="${balloon.getName()}"/>)
-                <br>
-            </ul>
-            <button class="btn btn-primary mt-2">Submit</button>
+            <div class="row">
+                <div class="col">
+                    <table class="table table-striped text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th></th>
+                            <th></th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="balloon: ${balloons}">
+                            <td><input type="radio" name="color" th:value="${balloon.getName()}"></td>
+                            <td th:text="${balloon.getName()}"><input type="radio" name="color"></td>
+                            <td th:text="${balloon.getDescription()}"><input type="radio" name="color"></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <form th:method="GET" th:action="@{'/balloons/edit-form/{id}' (id=${balloon.getId()})}">
+                                    <button style="float:left" value="Edit Balloon" class="btn btn-sm btn-success">Edit</button>
+                                </form>
+                                <form th:method="DELETE" th:action="@{'/balloons/delete/{id}' (id=${balloon.getId()})}">
+                                    <button style="float:right" value="Delete Balloon" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="row mt-3 mb-5">
+                <div class="col-10">
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+
+                <div class="col">
+                    <form th:method="GET" th:action="@{/balloons/add-form}" class="text-center">
+                        <input type="submit" value="Add balloon" class="btn btn-info text-white">
+                    </form>
+                </div>
+            </div>
         </form>
     </div>
 
-    <div class="mt-4 mb-5 text-center">
-        <form th:method="GET" th:action="@{/searchBalloons}">
-            <input type="text" name="searchBox">
-            <input type="submit" value="Search" class="btn btn-primary">
-        </form>
-    </div>
 </main>
 
 </body>
