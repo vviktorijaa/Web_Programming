@@ -2,7 +2,6 @@ package mk.finki.ukim.mk.lab.repository;
 
 import mk.finki.ukim.mk.lab.model.Manufacturer;
 import org.springframework.stereotype.Repository;
-
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;

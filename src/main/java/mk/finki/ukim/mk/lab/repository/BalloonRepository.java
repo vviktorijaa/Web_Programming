@@ -2,9 +2,11 @@ package mk.finki.ukim.mk.lab.repository;
 
 import mk.finki.ukim.mk.lab.model.Balloon;
 import mk.finki.ukim.mk.lab.model.Manufacturer;
+import mk.finki.ukim.mk.lab.model.exceptions.BalloonAlreadyExistsException;
 import org.springframework.stereotype.Repository;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,7 +36,10 @@ public class BalloonRepository {
     }
 
     public List<Balloon> findAllBalloons(){
-        return balloonList;
+        return balloonList
+                .stream()
+                .sorted(Comparator.comparing(Balloon::getName))
+                .collect(Collectors.toList());
     }
 
     public List<Balloon> findAllByNameOrDescription(String text){
@@ -44,11 +49,16 @@ public class BalloonRepository {
         return null;
     }
 
-    public Optional<Balloon> saveOrUpdateBalloon(String name, String description){
-        balloonList.removeIf(b->b.getName().equals(name));
-        Balloon b = new Balloon(name, description, new Manufacturer("m", "m", "m"));
-        balloonList.add(b);
-        return Optional.of(b);
+    public Optional<Balloon> saveOrUpdateBalloon(String name, String description, Manufacturer m){
+        if(balloonList.stream().filter(b->b.getName().equals(name)).findFirst().isPresent()){
+            throw new BalloonAlreadyExistsException();
+        }
+        else{
+            balloonList.removeIf(b->b.getName().equals(name));
+            Balloon b = new Balloon(name, description, m);
+            balloonList.add(b);
+            return Optional.of(b);
+        }
     }
 
     public void deleteById(Long id){

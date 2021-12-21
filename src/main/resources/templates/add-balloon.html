@@ -58,9 +58,9 @@
                 </div>
 
                 <label for="manufacturer">Choose a manufacturer:</label>
-                <select name="manufacturer" id="manufacturer">
-                    <option name="manufacturer"
-                            th:if="${manufacturers} == null"
+                <select name="id" id="manufacturer">
+                    <option name="id"
+                            th:if="${manufacturers} != null"
                             th:each="m:${manufacturers}"
                             th:value="${m.getId()}"
                             th:text="${m.getName()}"></option>

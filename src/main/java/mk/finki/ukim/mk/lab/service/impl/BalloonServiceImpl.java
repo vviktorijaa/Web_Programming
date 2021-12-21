@@ -32,10 +32,10 @@ public class BalloonServiceImpl implements BalloonService {
     }
 
     @Override
-    public Optional<Balloon> save(String name, String description) {
-//        Manufacturer m = this.manufacturerRepository.findById(id)
-//                .orElseThrow(() -> new ManufacturerNotFoundException());
-        return this.balloonRepository.saveOrUpdateBalloon(name, description);
+    public Optional<Balloon> save(String name, String description, Long id) {
+        Manufacturer m = this.manufacturerRepository.findById(id)
+                .orElseThrow(() -> new ManufacturerNotFoundException());
+        return this.balloonRepository.saveOrUpdateBalloon(name, description, m);
     }
 
     public void deleteById(Long id){

@@ -3,13 +3,12 @@ package mk.finki.ukim.mk.lab.web.controller;
 import jdk.jshell.MethodSnippet;
 import mk.finki.ukim.mk.lab.model.Balloon;
 import mk.finki.ukim.mk.lab.model.Manufacturer;
+import mk.finki.ukim.mk.lab.model.exceptions.BalloonAlreadyExistsException;
 import mk.finki.ukim.mk.lab.service.BalloonService;
 import mk.finki.ukim.mk.lab.service.ManufacturerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import javax.print.DocFlavor;
 import java.util.List;
 
 @Controller
@@ -36,8 +35,15 @@ public class BalloonController {
 
     @PostMapping("/add")
     public String saveBalloon(@RequestParam String name,
-                              @RequestParam String description){
-        this.balloonService.save(name, description); //manufacturer id
+                              @RequestParam String description,
+                              @RequestParam Long id, Model model){
+        try{
+            this.balloonService.save(name, description, id);
+        }
+        catch (BalloonAlreadyExistsException ex){
+            model.addAttribute("hasError", true);
+            model.addAttribute("error", ex.getMessage());
+        }
         return "redirect:/balloons";
     }
 
@@ -64,5 +70,10 @@ public class BalloonController {
             return "add-balloon";
         }
         return "redirect:/balloons";
+    }
+
+    @PostMapping
+    public String getNextPage(@ModelAttribute("color") String color){
+        return "selectBalloonSize";
     }
 }

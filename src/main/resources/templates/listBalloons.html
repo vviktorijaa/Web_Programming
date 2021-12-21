@@ -40,7 +40,12 @@
 
     <h3 class="mt-4 text-center mb-4">Choose balloon color:</h3>
     <div class="container w-75">
-        <form th:method="POST" th:action="@{/}">
+
+        <div th:if="${hasError}">
+            <h5 class="text-center text-danger" th:text="${error}"></h5>
+        </div>
+
+<!--        <form th:method="POST" th:action="@{/}">-->
             <div class="row">
                 <div class="col">
                     <table class="table table-striped text-center">
@@ -49,17 +54,20 @@
                             <th scope="col"></th>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
-                            <th></th>
+                            <th scope="col">Manufacturer</th>
                             <th></th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
+
                         <tr th:each="balloon: ${balloons}">
-                            <td><input type="radio" name="color" th:value="${balloon.getName()}"></td>
-                            <td th:text="${balloon.getName()}"><input type="radio" name="color"></td>
-                            <td th:text="${balloon.getDescription()}"><input type="radio" name="color"></td>
-                            <td></td>
+                            <td>
+                                <input type="radio" name="color" th:value="${balloon.getName()}">
+                            </td>
+                            <td th:text="${balloon.getName()}"></td>
+                            <td th:text="${balloon.getDescription()}"></td>
+                            <td th:text="${balloon.getM().getName()}"></td>
                             <td></td>
                             <td>
                                 <form th:method="GET" th:action="@{'/balloons/edit-form/{id}' (id=${balloon.getId()})}">
@@ -70,6 +78,7 @@
                                 </form>
                             </td>
                         </tr>
+
                         </tbody>
                     </table>
                 </div>
@@ -78,7 +87,9 @@
 
             <div class="row mt-3 mb-5">
                 <div class="col-10">
-                    <button class="btn btn-primary">Submit</button>
+                    <form th:method="POST" th:action="@{/}">
+                        <input type="submit" class="btn btn-primary">
+                    </form>
                 </div>
 
                 <div class="col">
@@ -87,7 +98,7 @@
                     </form>
                 </div>
             </div>
-        </form>
+<!--        </form>-->
     </div>
 
 </main>

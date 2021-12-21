@@ -10,7 +10,7 @@ public interface BalloonService {
 
     List<Balloon> searchByNameOrDescription(String text);
 
-    Optional<Balloon> save(String name, String description);
+    Optional<Balloon> save(String name, String description, Long id);
 
     void deleteById(Long id);
 
