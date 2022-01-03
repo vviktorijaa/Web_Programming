@@ -2,6 +2,7 @@ package mk.finki.ukim.mk.lab.service.impl;
 
 import mk.finki.ukim.mk.lab.model.Manufacturer;
 import mk.finki.ukim.mk.lab.repository.ManufacturerRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.ManufacturerJpaRepository;
 import mk.finki.ukim.mk.lab.service.ManufacturerService;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,9 @@ import java.util.Optional;
 @Service
 public class ManufacturerServiceImpl implements ManufacturerService {
 
-    private final ManufacturerRepository manufacturerRepository;
+    private final ManufacturerJpaRepository manufacturerRepository;
 
-    public ManufacturerServiceImpl(ManufacturerRepository manufacturerRepository) {
+    public ManufacturerServiceImpl(ManufacturerJpaRepository manufacturerRepository) {
         this.manufacturerRepository = manufacturerRepository;
     }
 

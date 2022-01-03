@@ -3,8 +3,9 @@ package mk.finki.ukim.mk.lab.service.impl;
 import mk.finki.ukim.mk.lab.model.Balloon;
 import mk.finki.ukim.mk.lab.model.Manufacturer;
 import mk.finki.ukim.mk.lab.model.exceptions.ManufacturerNotFoundException;
-import mk.finki.ukim.mk.lab.repository.BalloonRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.BalloonJpaRepository;
 import mk.finki.ukim.mk.lab.repository.ManufacturerRepository;
+import mk.finki.ukim.mk.lab.repository.jpa.ManufacturerJpaRepository;
 import mk.finki.ukim.mk.lab.service.BalloonService;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,29 +14,30 @@ import java.util.Optional;
 @Service
 public class BalloonServiceImpl implements BalloonService {
 
-    private final BalloonRepository balloonRepository;
-    private final ManufacturerRepository manufacturerRepository;
+    private final BalloonJpaRepository balloonRepository;
+    private final ManufacturerJpaRepository manufacturerRepository;
 
-    public BalloonServiceImpl(BalloonRepository balloonRepository, ManufacturerRepository manufacturerRepository) {
+    public BalloonServiceImpl(BalloonJpaRepository balloonRepository, ManufacturerJpaRepository manufacturerRepository) {
         this.balloonRepository = balloonRepository;
         this.manufacturerRepository = manufacturerRepository;
     }
 
     @Override
     public List<Balloon> listAll() {
-        return balloonRepository.findAllBalloons();
+        return balloonRepository.findAll();
     }
 
     @Override
     public List<Balloon> searchByNameOrDescription(String text) {
-        return balloonRepository.findAllByNameOrDescription(text);
+        return balloonRepository.findAllByNameLike(text);
     }
 
     @Override
-    public Optional<Balloon> save(String name, String description, Long id) {
+    public Balloon save(String name, String description, Long id) {
         Manufacturer m = this.manufacturerRepository.findById(id)
                 .orElseThrow(() -> new ManufacturerNotFoundException());
-        return this.balloonRepository.saveOrUpdateBalloon(name, description, m);
+        Balloon b = new Balloon(name, description, m);
+        return this.balloonRepository.save(b);
     }
 
     public void deleteById(Long id){
