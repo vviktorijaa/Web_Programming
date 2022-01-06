@@ -1,7 +1,9 @@
 package mk.finki.ukim.mk.lab.model;
 
 import lombok.Data;
-
+import mk.finki.ukim.mk.lab.model.AttributeConverters.UserFullName;
+import mk.finki.ukim.mk.lab.model.AttributeConverters.UserFullnameConverter;
+import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,21 +19,20 @@ public class User {
 
     private String username;
 
-    private String name;
-
-    private String surname;
+    @Convert(converter = UserFullnameConverter.class)
+    private UserFullName userFullName;
 
     private String password;
 
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dateOfBirth;
 
     @OneToMany(mappedBy = "user")
     private List<ShoppingCart> carts;
 
-    public User(String username, String name, String surname, String password, LocalDate dateOfBirth, List<ShoppingCart> carts) {
+    public User(String username, UserFullName userFullName, String password, LocalDate dateOfBirth, List<ShoppingCart> carts) {
         this.username = username;
-        this.name = name;
-        this.surname = surname;
+        this.userFullName = userFullName;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.carts = carts;

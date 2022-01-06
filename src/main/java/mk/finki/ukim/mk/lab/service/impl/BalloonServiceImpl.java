@@ -8,6 +8,8 @@ import mk.finki.ukim.mk.lab.repository.ManufacturerRepository;
 import mk.finki.ukim.mk.lab.repository.jpa.ManufacturerJpaRepository;
 import mk.finki.ukim.mk.lab.service.BalloonService;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +35,11 @@ public class BalloonServiceImpl implements BalloonService {
     }
 
     @Override
+    @Transactional
     public Balloon save(String name, String description, Long id) {
         Manufacturer m = this.manufacturerRepository.findById(id)
                 .orElseThrow(() -> new ManufacturerNotFoundException());
+        this.balloonRepository.deleteByName(name);
         Balloon b = new Balloon(name, description, m);
         return this.balloonRepository.save(b);
     }

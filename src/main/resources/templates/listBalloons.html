@@ -70,11 +70,14 @@
                             <td th:text="${balloon.getM().getName()}"></td>
                             <td></td>
                             <td>
-                                <form th:method="GET" th:action="@{'/balloons/edit-form/{id}' (id=${balloon.getId()})}">
-                                    <button style="float:left" value="Edit Balloon" class="btn btn-sm btn-success">Edit</button>
+                                <form th:method="GET" th:action="@{'/balloons/edit-form/{id}' (id=${balloon.getId()})}" class="mb-2">
+                                    <button value="Edit Balloon" class="btn btn-sm btn-success">Edit</button>
                                 </form>
-                                <form th:method="DELETE" th:action="@{'/balloons/delete/{id}' (id=${balloon.getId()})}">
-                                    <button style="float:right" value="Delete Balloon" class="btn btn-sm btn-danger">Delete</button>
+                                <form th:method="DELETE" th:action="@{'/balloons/delete/{id}' (id=${balloon.getId()})}" class="mb-2">
+                                    <button value="Delete Balloon" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                                <form th:method="POST" th:action="@{'/balloons/add-balloon/{id}' (id=${balloon.getId()})}" >
+                                    <button value="Add to shopping cart" class="btn btn-sm btn-info text-white">Add to cart</button>
                                 </form>
                             </td>
                         </tr>

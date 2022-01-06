@@ -76,4 +76,9 @@ public class BalloonController {
     public String getNextPage(@ModelAttribute("color") String color){
         return "selectBalloonSize";
     }
+
+    @PostMapping("/add-balloon/{id}")
+    public String getShoppingCart(@PathVariable Long id){
+        return "shoppingCart";
+    }
 }

@@ -14,5 +14,7 @@ public interface BalloonJpaRepository extends JpaRepository<Balloon, Long> {
     @Override
     List<Balloon> findAll();
 
+    void deleteByName(String name);
+
     //Balloon save(Balloon b);
 }
