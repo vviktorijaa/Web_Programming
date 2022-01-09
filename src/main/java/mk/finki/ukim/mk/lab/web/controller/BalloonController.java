@@ -1,18 +1,19 @@
 package mk.finki.ukim.mk.lab.web.controller;
 
-import jdk.jshell.MethodSnippet;
 import mk.finki.ukim.mk.lab.model.Balloon;
 import mk.finki.ukim.mk.lab.model.Manufacturer;
 import mk.finki.ukim.mk.lab.model.exceptions.BalloonAlreadyExistsException;
 import mk.finki.ukim.mk.lab.service.BalloonService;
 import mk.finki.ukim.mk.lab.service.ManufacturerService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping("/balloons")
+@RequestMapping({"/balloons", "/"})
 public class BalloonController {
 
     private final BalloonService balloonService;
@@ -30,7 +31,8 @@ public class BalloonController {
             model.addAttribute("error", error);
         }
         model.addAttribute("balloons", balloonService.listAll());
-        return "listBalloons";
+        model.addAttribute("bodyContent", "listBalloons");
+        return "master-template";
     }
 
     @PostMapping("/add")
@@ -54,6 +56,7 @@ public class BalloonController {
     }
 
     @GetMapping("/add-form")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getAddBalloonPage(Model model){
         List<Manufacturer> manufacturers = this.manufacturerService.findAll();
         model.addAttribute("manufacturers", manufacturers);
@@ -73,12 +76,22 @@ public class BalloonController {
     }
 
     @PostMapping
-    public String getNextPage(@ModelAttribute("color") String color){
-        return "selectBalloonSize";
+    public String getNextPage(@RequestParam(required = false) String color,
+                              HttpServletRequest request){
+        request.getSession().setAttribute("color", color);
+        return "redirect:/selectBalloonSize";
     }
 
     @PostMapping("/add-balloon/{id}")
-    public String getShoppingCart(@PathVariable Long id){
-        return "shoppingCart";
+    public String getShoppingCart(@PathVariable Long id,
+                                  Model model){
+        model.addAttribute("bodyContent", "shoppingCart");
+        return "master-template";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request){
+        request.getSession().invalidate();
+        return "redirect:/login";
     }
 }
